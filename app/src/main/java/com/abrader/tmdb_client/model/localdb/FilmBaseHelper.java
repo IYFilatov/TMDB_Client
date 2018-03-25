@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client.data;
+package com.abrader.tmdb_client.model.localdb;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,12 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.abrader.tmdb_client.FilmData;
+import com.abrader.tmdb_client.model.api.FilmData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.abrader.tmdb_client.data.FilmBaseContract.*;
+import static com.abrader.tmdb_client.model.localdb.FilmBaseContract.*;
 
 public class FilmBaseHelper extends SQLiteOpenHelper {
 
@@ -185,7 +184,7 @@ public class FilmBaseHelper extends SQLiteOpenHelper {
 
                 toList.add(film);
             }
-            Log.i("Загрузка данных", String.valueOf(toList.size()));
+            Log.i("Data Load ", String.valueOf(toList.size()));
         }
 
     }

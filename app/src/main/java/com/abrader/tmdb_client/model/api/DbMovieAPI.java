@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client;
+package com.abrader.tmdb_client.model.api;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

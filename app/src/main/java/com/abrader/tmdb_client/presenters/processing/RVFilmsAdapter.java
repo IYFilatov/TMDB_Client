@@ -1,23 +1,23 @@
-package com.abrader.tmdb_client;
+package com.abrader.tmdb_client.presenters.processing;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.abrader.tmdb_client.FilmDetailActivity;
+import com.abrader.tmdb_client.R;
+import com.abrader.tmdb_client.model.api.FilmData;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RVFilmsAdapter extends RecyclerView.Adapter<RVFilmsAdapter.FilmsViewHolder>{
@@ -31,9 +31,9 @@ public class RVFilmsAdapter extends RecyclerView.Adapter<RVFilmsAdapter.FilmsVie
         FilmsViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            filmTitle = (TextView)itemView.findViewById(R.id.film_title);
-            poster = (ImageView)itemView.findViewById(R.id.poster);
+            cv = itemView.findViewById(R.id.cv);
+            filmTitle = itemView.findViewById(R.id.film_title);
+            poster = itemView.findViewById(R.id.poster);
         }
 
         public void setFilmID(int filmID){
@@ -50,12 +50,22 @@ public class RVFilmsAdapter extends RecyclerView.Adapter<RVFilmsAdapter.FilmsVie
         }
     }
 
-    List<FilmData> films;
+    private List<FilmData> films;
     int screenWidth;
 
-    RVFilmsAdapter(List<FilmData> films, int screenWidth){
-        this.films = films;
+    public RVFilmsAdapter(int screenWidth){
         this.screenWidth = screenWidth;
+        films = new ArrayList<FilmData>();
+    }
+
+    public void setData(List<FilmData> films){
+        this.films.clear();
+        this.films.addAll(films);
+        notifyDataSetChanged();
+    }
+
+    public List<FilmData> getData(){
+        return films;
     }
 
     @Override

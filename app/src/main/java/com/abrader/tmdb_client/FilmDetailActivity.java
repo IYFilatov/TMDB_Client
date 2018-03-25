@@ -5,34 +5,69 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.abrader.tmdb_client.data.FilmBaseHelper;
+import com.abrader.tmdb_client.model.localdb.FilmBaseHelper;
+import com.abrader.tmdb_client.presenters.FilmDetailPresenter;
+import com.abrader.tmdb_client.presenters.contracts.FilmDetailContract;
 import com.squareup.picasso.Picasso;
 
-public class FilmDetailActivity extends AppCompatActivity {
+public class FilmDetailActivity extends AppCompatActivity implements FilmDetailContract.View {
+
+    private FilmDetailContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_film_detail);
-
         int filmID = getIntent().getIntExtra("aka.Abrader.tmdb.filmID", 0);
-        FilmBaseHelper fbh = new FilmBaseHelper(this);
-        FilmData film = fbh.getFilmByExternalID(fbh.getReadableDatabase(), filmID);
 
-        TextView vTitle = (TextView) findViewById(R.id.film_title);
-        vTitle.setText(film.getTitle());
+        FilmBaseHelper fDbHelper = new FilmBaseHelper(this);
+        presenter = new FilmDetailPresenter(fDbHelper);
+        presenter.attachView(this);
+        presenter.fillByID(filmID);
 
-        TextView vDescription = (TextView) findViewById(R.id.film_description);
-        vDescription.setText(film.getOverview());
+    }
 
-        ImageView vPoster = (ImageView) findViewById(R.id.poster);
-        Bitmap bmPoster = film.getPoster_b64_bitmap();
-        if (bmPoster != null){
-            vPoster.setImageBitmap(bmPoster);
-        } else {
-            String path = "https://image.tmdb.org/t/p/w500" + film.getPosterPath();
-            Picasso.with(vPoster.getContext()).load(path).into(vPoster);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
+        if (isFinishing()) {
+            presenter.destroy();
         }
     }
+
+    @Override
+    public void setTitle(String title){
+        TextView vTitle = findViewById(R.id.film_title);
+        vTitle.setText(title);
+    }
+
+    @Override
+    public void setDescription(String description){
+        TextView vDescription = findViewById(R.id.film_description);
+        vDescription.setText(description);
+    }
+
+    @Override
+    public void setPoster(Bitmap bmPoster) {
+        if (bmPoster != null){
+            ImageView vPoster = findViewById(R.id.poster);
+            vPoster.setImageBitmap(bmPoster);
+        }
+    }
+
+    @Override
+    public void loadPoster(String posterPath) {
+        ImageView vPoster = findViewById(R.id.poster);
+        Picasso.with(vPoster.getContext()).load(posterPath).into(vPoster);
+    }
+
+    @Override
+    public void showMessage(CharSequence message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client;
+package com.abrader.tmdb_client.presenters.processing;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

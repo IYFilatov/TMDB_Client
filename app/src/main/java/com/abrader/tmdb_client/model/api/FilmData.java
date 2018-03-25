@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client;
+package com.abrader.tmdb_client.model.api;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -179,7 +179,7 @@ public class FilmData {
     public Bitmap getPoster_b64_bitmap() {
         Bitmap result = null;
 
-        if (poster_b64 != null  && poster_b64 != "") {
+        if (poster_b64 != null  && !poster_b64.isEmpty()) {
             byte[] decodedBytes = Base64.decode(
                     poster_b64.substring(poster_b64.indexOf(",") + 1),
                     Base64.DEFAULT);

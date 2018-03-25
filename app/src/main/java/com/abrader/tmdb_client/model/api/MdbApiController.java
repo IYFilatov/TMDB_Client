@@ -1,13 +1,14 @@
-package com.abrader.tmdb_client;
+package com.abrader.tmdb_client.model.api;
 
 
+import com.abrader.tmdb_client.model.api.DbMovieAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-class MdbApiController {
+public class MdbApiController {
 
     static final String BASE_URL = "https://api.themoviedb.org/";
 
