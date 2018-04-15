@@ -1,5 +1,6 @@
 package com.abrader.tmdb_client;
 
+import android.arch.persistence.room.Room;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abrader.tmdb_client.model.localdb.FilmBaseHelper;
+import com.abrader.tmdb_client.model.dbmanual_not_in_use.FilmBaseHelper;
+import com.abrader.tmdb_client.model.dbroom.AppDatabase;
 import com.abrader.tmdb_client.presenters.FilmDetailPresenter;
 import com.abrader.tmdb_client.presenters.contracts.FilmDetailContract;
 import com.squareup.picasso.Picasso;
@@ -22,8 +24,8 @@ public class FilmDetailActivity extends AppCompatActivity implements FilmDetailC
         setContentView(R.layout.activity_film_detail);
         int filmID = getIntent().getIntExtra("aka.Abrader.tmdb.filmID", 0);
 
-        FilmBaseHelper fDbHelper = new FilmBaseHelper(this);
-        presenter = new FilmDetailPresenter(fDbHelper);
+        AppDatabase dbRoom = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "tmdb_storage").allowMainThreadQueries().build();
+        presenter = new FilmDetailPresenter(dbRoom);
         presenter.attachView(this);
         presenter.fillByID(filmID);
 

@@ -1,0 +1,11 @@
+package com.abrader.tmdb_client.model.dbroom;
+
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.RoomDatabase;
+
+import com.abrader.tmdb_client.model.FilmData;
+
+@Database(entities = {FilmData.class}, version = 1, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract FilmDAO getFilmDAO();
+}

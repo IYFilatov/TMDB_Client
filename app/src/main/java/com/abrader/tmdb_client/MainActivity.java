@@ -1,5 +1,6 @@
 package com.abrader.tmdb_client;
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.abrader.tmdb_client.model.localdb.FilmBaseHelper;
+import com.abrader.tmdb_client.model.dbroom.AppDatabase;
 import com.abrader.tmdb_client.presenters.MainActivityPresenter;
 import com.abrader.tmdb_client.presenters.contracts.MainActivityContract;
-import com.abrader.tmdb_client.presenters.processing.RVFilmsAdapter;
+import com.abrader.tmdb_client.processing.RVFilmsAdapter;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View, NavigationView.OnNavigationItemSelectedListener, NavigationView.OnCreateContextMenuListener {
@@ -87,13 +88,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         rvMain.setAdapter(adapter);
 
 
-
-        FilmBaseHelper fDbHelper = new FilmBaseHelper(this);
-        presenter = new MainActivityPresenter(fDbHelper);
+        AppDatabase dbRoom = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "tmdb_storage").allowMainThreadQueries().build();
+        presenter = new MainActivityPresenter(dbRoom);
         presenter.attachView(this);
         presenter.loadListFromDB();
         presenter.loadPage(1, "primary_release_date.desc");
-        presenter.viewIsReady();
     }
 
 

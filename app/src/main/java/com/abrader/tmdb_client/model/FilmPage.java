@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client.model.api;
+package com.abrader.tmdb_client.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

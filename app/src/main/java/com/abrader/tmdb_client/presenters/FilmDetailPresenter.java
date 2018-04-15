@@ -3,17 +3,18 @@ package com.abrader.tmdb_client.presenters;
 import android.graphics.Bitmap;
 
 import com.abrader.tmdb_client.base.MasterPresenter;
-import com.abrader.tmdb_client.model.api.FilmData;
-import com.abrader.tmdb_client.model.localdb.FilmBaseHelper;
+import com.abrader.tmdb_client.model.FilmData;
+import com.abrader.tmdb_client.model.dbmanual_not_in_use.FilmBaseHelper;
+import com.abrader.tmdb_client.model.dbroom.AppDatabase;
+import com.abrader.tmdb_client.model.dbroom.FilmDAO;
 import com.abrader.tmdb_client.presenters.contracts.FilmDetailContract;
-import com.squareup.picasso.Picasso;
 
 public class FilmDetailPresenter extends MasterPresenter<FilmDetailContract.View> implements FilmDetailContract.Presenter {
 
-    private FilmBaseHelper fDBHelper;
+    private AppDatabase dbRoom;
 
-    public FilmDetailPresenter(FilmBaseHelper fDBHelper) {
-        this.fDBHelper = fDBHelper;
+    public FilmDetailPresenter(AppDatabase dbRoom) {
+        this.dbRoom = dbRoom;
     }
 
     @Override
@@ -23,7 +24,8 @@ public class FilmDetailPresenter extends MasterPresenter<FilmDetailContract.View
 
     @Override
     public void fillByID(int fID) {
-        FilmData film = fDBHelper.getFilmByExternalID(fDBHelper.getReadableDatabase(), fID);
+        FilmDAO filmDAO = dbRoom.getFilmDAO();
+        FilmData film = filmDAO.getFilmByExternalID(fID);
         getView().setTitle(film.getTitle());
         getView().setDescription(film.getOverview());
         Bitmap bmPoster = film.getPoster_b64_bitmap();

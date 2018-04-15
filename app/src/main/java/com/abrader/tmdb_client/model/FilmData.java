@@ -1,7 +1,12 @@
-package com.abrader.tmdb_client.model.api;
+package com.abrader.tmdb_client.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.google.gson.annotations.Expose;
@@ -10,15 +15,21 @@ import com.google.gson.annotations.SerializedName;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+@Entity(tableName = "films")
 public class FilmData {
     @SerializedName("vote_count")
     @Expose
+    @Ignore
     private Integer voteCount;
     @SerializedName("id")
     @Expose
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "name")
     private Integer id;
     @SerializedName("video")
     @Expose
+    @Ignore
     private Boolean video;
     @SerializedName("vote_average")
     @Expose
@@ -34,18 +45,23 @@ public class FilmData {
     private String posterPath;
     @SerializedName("original_language")
     @Expose
+    @Ignore
     private String originalLanguage;
     @SerializedName("original_title")
     @Expose
+    @Ignore
     private String originalTitle;
     @SerializedName("genre_ids")
     @Expose
+    @Ignore
     private List<Integer> genreIds = null;
     @SerializedName("backdrop_path")
     @Expose
+    @Ignore
     private String backdropPath;
     @SerializedName("adult")
     @Expose
+    @Ignore
     private Boolean adult;
     @SerializedName("overview")
     @Expose
@@ -53,7 +69,6 @@ public class FilmData {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
-
     private String poster_b64;
 
     public Integer getVoteCount() {
@@ -64,6 +79,7 @@ public class FilmData {
         this.voteCount = voteCount;
     }
 
+    @NonNull
     public Integer getId() {
         return id;
     }

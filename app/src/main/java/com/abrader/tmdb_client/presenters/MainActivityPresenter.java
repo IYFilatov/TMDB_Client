@@ -1,12 +1,13 @@
 package com.abrader.tmdb_client.presenters;
 
 import com.abrader.tmdb_client.base.MasterPresenter;
+import com.abrader.tmdb_client.model.dbroom.AppDatabase;
+import com.abrader.tmdb_client.model.dbroom.FilmDAO;
 import com.abrader.tmdb_client.preferences.Constants;
 import com.abrader.tmdb_client.model.api.DbMovieAPI;
-import com.abrader.tmdb_client.model.api.FilmData;
-import com.abrader.tmdb_client.model.api.FilmPage;
+import com.abrader.tmdb_client.model.FilmData;
+import com.abrader.tmdb_client.model.FilmPage;
 import com.abrader.tmdb_client.model.api.MdbApiController;
-import com.abrader.tmdb_client.model.localdb.FilmBaseHelper;
 import com.abrader.tmdb_client.presenters.contracts.MainActivityContract;
 
 import java.util.List;
@@ -17,10 +18,10 @@ import retrofit2.Response;
 
 public class MainActivityPresenter extends MasterPresenter<MainActivityContract.View> implements MainActivityContract.Presenter {
 
-    private FilmBaseHelper fDBHelper;
+    private AppDatabase dbRoom;
 
-    public MainActivityPresenter(FilmBaseHelper fDBHelper){
-        this.fDBHelper = fDBHelper;
+    public MainActivityPresenter(AppDatabase dbRoom){
+        this.dbRoom = dbRoom;
     }
 
     public void loadPage(int pageNum, String sortBy){
@@ -40,8 +41,8 @@ public class MainActivityPresenter extends MasterPresenter<MainActivityContract.
                 List<FilmData> films = getView().getrvAdapter().getData();
                 films.clear();
                 films.addAll(page.getResults());
-                fDBHelper.updateFilmBaseData(films);
-                getView().getrvAdapter().notifyDataSetChanged();
+                updateFilmBaseData(films);
+                viewIsReady();
             }
 
             @Override
@@ -51,13 +52,14 @@ public class MainActivityPresenter extends MasterPresenter<MainActivityContract.
         });
     }
 
+
     public void searchMovie(int pageNum, String query){
         getTMDBApi().searchMovie(Constants.API_KEY, "en-US", query, pageNum, false, "ae").enqueue(new Callback<FilmPage>() {
             @Override
             public void onResponse(Call<FilmPage> call, Response<FilmPage> response) {
                 FilmPage page = response.body();
                 getView().getrvAdapter().setData(page.getResults());
-                fDBHelper.updateFilmBaseData(getView().getrvAdapter().getData());
+                updateFilmBaseData(getView().getrvAdapter().getData());
             }
 
             @Override
@@ -68,9 +70,24 @@ public class MainActivityPresenter extends MasterPresenter<MainActivityContract.
     }
 
     @Override
+    public void updateFilmBaseData(List<FilmData> films) {
+        FilmDAO filmDAO = dbRoom.getFilmDAO();
+        FilmData existFilmData;
+        for (FilmData film:films) {
+            existFilmData = filmDAO.getFilmByExternalID(film.getId());
+            if (existFilmData == null) {
+                filmDAO.insert(film);
+            } else {
+                filmDAO.update(film);
+            }
+        };
+    }
+
+    @Override
     public void loadListFromDB(){
         List<FilmData> toList = getView().getrvAdapter().getData();
-        fDBHelper.getAllFilmsData(toList);
+        FilmDAO filmDAO = dbRoom.getFilmDAO();
+        toList.addAll(filmDAO.getAllFilmsData());
         if (toList.size() > 0) {
             viewIsReady();
         }

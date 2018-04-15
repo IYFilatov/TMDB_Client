@@ -1,5 +1,7 @@
 package com.abrader.tmdb_client.model.api;
 
+import com.abrader.tmdb_client.model.FilmPage;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

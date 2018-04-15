@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client.model.localdb;
+package com.abrader.tmdb_client.model.dbmanual_not_in_use;
 
 import android.provider.BaseColumns;
 

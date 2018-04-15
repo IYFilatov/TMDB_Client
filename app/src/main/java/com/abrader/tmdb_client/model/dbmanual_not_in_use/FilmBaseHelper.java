@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client.model.localdb;
+package com.abrader.tmdb_client.model.dbmanual_not_in_use;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.abrader.tmdb_client.model.api.FilmData;
+import com.abrader.tmdb_client.model.FilmData;
 
 import java.util.List;
 
-import static com.abrader.tmdb_client.model.localdb.FilmBaseContract.*;
+import static com.abrader.tmdb_client.model.dbmanual_not_in_use.FilmBaseContract.*;
 
 public class FilmBaseHelper extends SQLiteOpenHelper {
 
@@ -24,7 +24,7 @@ public class FilmBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Строка для создания таблицы
+        // string for creating a table
         String SQL_CREATE_GUESTS_TABLE = "CREATE TABLE " + FilmEntry.TABLE_NAME + " ("
                 + FilmEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + FilmEntry.COLUMN_NAME_EXTERNAL_ID + " INTEGER NOT NULL, "
@@ -36,15 +36,15 @@ public class FilmBaseHelper extends SQLiteOpenHelper {
                 + FilmEntry.COLUMN_POSTER_PATH + " TEXT, "
                 + FilmEntry.COLUMN_POSTER_B64 + " TEXT);";
 
-        // Запускаем создание таблицы
+        // creat table
         sqLiteDatabase.execSQL(SQL_CREATE_GUESTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        // Удаляем старую таблицу и создаём новую
+        // Delete old table and create new one
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FilmEntry.TABLE_NAME);
-        // Создаём новую таблицу
+        // Creating new table
         onCreate(sqLiteDatabase);
     }
 
@@ -105,13 +105,13 @@ public class FilmBaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {id.toString()};
 
         Cursor cursor = sqLiteDatabase.query(
-                FilmEntry.TABLE_NAME,  // таблица
-                projection,            // столбцы
-                selectionString,       // столбцы для условия WHERE
-                selectionArgs,         // значения для условия WHERE
+                FilmEntry.TABLE_NAME,  // tables
+                projection,            // columns
+                selectionString,       // columns for condition WHERE
+                selectionArgs,         // values for condition WHERE
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                FilmEntry.COLUMN_NAME_TITLE + " DESC");  // порядок сортировки
+                FilmEntry.COLUMN_NAME_TITLE + " DESC");  // sorting order
 
         FilmData result = null;
         if (cursor.getCount() > 0) {
@@ -161,13 +161,13 @@ public class FilmBaseHelper extends SQLiteOpenHelper {
         };
 
         Cursor cursor = dbRead.query(
-                FilmEntry.TABLE_NAME,  // таблица
-                projection,            // столбцы
-                null,          // столбцы для условия WHERE
-                null,       // значения для условия WHERE
+                FilmEntry.TABLE_NAME,  // tables
+                projection,            // columns
+                null,          // columns for condition WHERE
+                null,       // values for condition WHERE
                 null,          // Don't group the rows
                 null,           // Don't filter by row groups
-                FilmEntry.COLUMN_NAME_TITLE + " DESC");  // порядок сортировки
+                FilmEntry.COLUMN_NAME_TITLE + " DESC");  // sorting order
 
         if (cursor.getCount() > 0) {
             toList.clear();

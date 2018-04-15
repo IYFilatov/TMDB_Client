@@ -1,4 +1,4 @@
-package com.abrader.tmdb_client.presenters.processing;
+package com.abrader.tmdb_client.processing;
 
 
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.abrader.tmdb_client.FilmDetailActivity;
 import com.abrader.tmdb_client.R;
-import com.abrader.tmdb_client.model.api.FilmData;
+import com.abrader.tmdb_client.model.FilmData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
